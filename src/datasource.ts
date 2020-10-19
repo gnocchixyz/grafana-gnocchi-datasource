@@ -83,7 +83,7 @@ export class GnocchiDatasource {
 
       } else if (this.auth_mode === "keystone"){
         this.url = null;
-        this.keystone_endpoint = this.sanitize_url(instanceSettings.url);
+        this.keystone_endpoint = this.sanitize_url(instanceSettings.jsonData.endpoint);
       }
     }
 

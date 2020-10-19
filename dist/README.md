@@ -108,11 +108,7 @@ For details of `Query` format, please refer to the Gnocchi and Gnocchi client do
 
 ## Current Limitation
 
-Grafana doesn’t allow to query two different servers when using the proxy mode,
-so we are not able to query Keystone for a token and then query Gnocchi (Except if
-Gnocchi and Keystone live into the same HTTP host).
-
-In direct mode, CORS MUST be enabled on Keystone and Gnocchi servers.
+Using Keystone, CORS MUST be enabled on Keystone and Gnocchi servers.
 
 ## License
 

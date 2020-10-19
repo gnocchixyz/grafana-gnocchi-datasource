@@ -22,10 +22,15 @@
     <div style="padding:5px">
         <span ng-if="ctrl.current.jsonData.mode == 'noauth'">noauth is deprecated</span>
         <span ng-if="ctrl.current.jsonData.mode == 'keystone'">The Keystone URL is expected in Http settings</span>
-        <span ng-if="ctrl.current.access == 'proxy' && ctrl.current.jsonData.mode == 'keystone'">Keystone and Gnocchi must be hosted on same HTTP endpoint (example: http://foobar/identity and http://foobar/metric)</span>
         <span ng-if="ctrl.current.jsonData.mode != 'keystone'">The Gnocchi URL is expected in Http settings</span>
     </div>
     <div ng-if="ctrl.current.jsonData.mode != 'token'">
+        <div class="gf-form-inline">
+            <div class="gf-form max-width-30">
+                <span class="gf-form-label width-7">Endpoint</span>
+                <input type="text" class="tight-form-input input-xlarge" ng-model='ctrl.current.jsonData.endpoint' placeholder="https://localhost:5000"></input>
+            </div>
+        </div>
         <div class="gf-form-inline">
             <div class="gf-form max-width-30">
                 <span class="gf-form-label width-7">Domain</span>

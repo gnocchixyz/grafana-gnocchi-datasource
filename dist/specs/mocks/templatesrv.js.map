@@ -1,1 +1,1 @@
-{"version":3,"file":"templatesrv.js","sourceRoot":"","sources":["../../../src/specs/mocks/templatesrv.ts"],"names":[],"mappings":";;AAAA;IAAA;IAIA,CAAC;IAHG,iCAAO,GAAP,UAAQ,KAAa,EAAE,MAAW;QAC9B,MAAM,CAAC,KAAK,CAAC;IACjB,CAAC;IACL,sBAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"templatesrv.js","sourceRoot":"","sources":["../../../src/specs/mocks/templatesrv.ts"],"names":[],"mappings":";;AAAA;IAAA;IAIA,CAAC;IAHG,iCAAO,GAAP,UAAQ,KAAa,EAAE,MAAW;QAC9B,OAAO,KAAK,CAAC;IACjB,CAAC;IACL,sBAAC;AAAD,CAAC,AAJD,IAIC"}
