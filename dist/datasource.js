@@ -864,7 +864,7 @@ var GnocchiDatasource = /** @class */ (function () {
                     "scope": {
                         "project": {
                             "domain": { "id": this.domain },
-                            "name": this.project,
+                            "id": this.project,
                         }
                     }
                 }
