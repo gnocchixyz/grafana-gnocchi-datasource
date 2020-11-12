@@ -234,14 +234,24 @@ var GnocchiDatasource = /** @class */ (function () {
     //////////////////////
     /// Measures helpers
     //////////////////////
+    GnocchiDatasource.prototype._strip_nulls_from_req = function(reqs) {
+	    for (var param in reqs.params) {
+            if (reqs.params[param] === null) {
+		        delete(reqs.params[param]);
+            }
+        }
+        return reqs;
+    };
     GnocchiDatasource.prototype._retrieve_measures = function (label, reqs, draw_missing_datapoint_as_zero) {
         var _this = this;
+        reqs = this._strip_nulls_from_req(reqs);
         return this._gnocchi_request(reqs).then(function (result) {
             return _this._parse_measures(label, result, draw_missing_datapoint_as_zero);
         });
     };
     GnocchiDatasource.prototype._retrieve_aggregates = function (user_label, reqs) {
         var _this = this;
+        reqs = this._strip_nulls_from_req(reqs);
         return this._gnocchi_request(reqs).then(function (result) {
             if (reqs.data.search === undefined) {
                 var metrics = {};
@@ -285,6 +295,7 @@ var GnocchiDatasource = /** @class */ (function () {
     };
     GnocchiDatasource.prototype._retrieve_legacy_aggregation_groupby = function (user_label, reqs) {
         var _this = this;
+        reqs = this._strip_nulls_from_req(reqs);
         return this._gnocchi_request(reqs).then(function (result) {
             return _.map(result, function (group) {
                 var label = _this._compute_label(user_label, group["group"], "aggregated", "");
@@ -294,6 +305,7 @@ var GnocchiDatasource = /** @class */ (function () {
     };
     GnocchiDatasource.prototype._retrieve_aggregates_groupby = function (user_label, reqs) {
         var _this = this;
+        reqs = this._strip_nulls_from_req(reqs);
         return this._gnocchi_request(reqs).then(function (result) {
             return _.map(result, function (group) {
                 var measures = group["measures"]["measures"];
@@ -871,7 +883,12 @@ var GnocchiDatasource = /** @class */ (function () {
             }
         };
         this.backendSrv.datasourceRequest(options).then(function (result) {
-            _this.default_headers['X-Auth-Token'] = result.headers('X-Subject-Token');
+            if (typeof(result.headers) === "function") {
+              _this.default_headers['X-Auth-Token'] = result.headers('X-Subject-Token');
+            } else {
+              _this.default_headers['X-Auth-Token'] = result.headers.get('X-Subject-Token');
+            }
+            _this.default_headers['X-Auth-Token'] = result.headers.get('X-Subject-Token');
             _.each(result.data['token']['catalog'], function (service) {
                 if (service['type'] === 'metric') {
                     _.each(service['endpoints'], function (endpoint) {

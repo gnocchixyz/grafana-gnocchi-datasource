@@ -273,13 +273,24 @@ export class GnocchiDatasource {
     /// Measures helpers
     //////////////////////
 
+    _strip_nulls_from_req(reqs) {
+      for (var param in reqs.params) {
+        if (reqs.params[param] === null) {
+          delete(reqs.params[param]);
+        }
+      }
+      return reqs;
+    }
+
     _retrieve_measures(label, reqs, draw_missing_datapoint_as_zero) {
+      reqs = this._strip_nulls_from_req(reqs);
       return this._gnocchi_request(reqs).then((result) => {
         return this._parse_measures(label, result, draw_missing_datapoint_as_zero);
       });
     }
 
     _retrieve_aggregates(user_label, reqs) {
+      reqs = this._strip_nulls_from_req(reqs);
       return this._gnocchi_request(reqs).then((result) => {
         if (reqs.data.search === undefined) {
           var metrics = {};
@@ -320,6 +331,7 @@ export class GnocchiDatasource {
     }
 
     _retrieve_legacy_aggregation_groupby(user_label, reqs) {
+      reqs = this._strip_nulls_from_req(reqs);
       return this._gnocchi_request(reqs).then((result) => {
         return _.map(result, (group) => {
           var label = this._compute_label(user_label, group["group"], "aggregated", "");
@@ -329,6 +341,7 @@ export class GnocchiDatasource {
     }
 
     _retrieve_aggregates_groupby(user_label, reqs) {
+      reqs = this._strip_nulls_from_req(reqs);
       return this._gnocchi_request(reqs).then((result) => {
         return _.map(result, (group) => {
           var measures = group["measures"]["measures"];
@@ -906,7 +919,11 @@ export class GnocchiDatasource {
       };
 
       this.backendSrv.datasourceRequest(options).then((result) => {
-        this.default_headers['X-Auth-Token'] = result.headers('X-Subject-Token');
+        if (typeof(result.headers) === "function") {
+          this.default_headers['X-Auth-Token'] = result.headers('X-Subject-Token');
+        } else {
+          this.default_headers['X-Auth-Token'] = result.headers.get('X-Subject-Token');
+        }
         _.each(result.data['token']['catalog'], (service) => {
           if (service['type'] === 'metric') {
             _.each(service['endpoints'], (endpoint) => {
